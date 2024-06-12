@@ -1,21 +1,14 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
+import os
 import joblib
 from flask import Flask, request, jsonify
 import pandas as pd
 import tensorflow as tf
-import os
 
 app = Flask(__name__)
 
 scaler_path = 'scaler.save'
 model_path = 'water_model.h5'
 
-# Debug print
 print("Current directory:", os.getcwd())
 print("Files in current directory:", os.listdir(os.getcwd()))
 print("Loading scaler from:", scaler_path)
@@ -28,7 +21,6 @@ except FileNotFoundError:
 except Exception as e:
     print("Error loading scaler:", str(e))
 
-# Load the model
 try:
     model = tf.keras.models.load_model(model_path)
     print("Model loaded successfully.")
@@ -63,11 +55,5 @@ def predict():
     return jsonify({"predictions": predictions})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
-
-
-# In[ ]:
-
-
-
-
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
